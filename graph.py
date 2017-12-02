@@ -6,10 +6,14 @@ import math
 from tqdm import tqdm
 
 #%%
+features_dataset = 'dataset_mt'
+mst_dataset = 'dataset_mt2'
+features_count = 108
+#%%
 
 # Load the data
 data = []
-with open('dataset1') as rf:
+with open(features_dataset) as rf:
     next(rf)
     for row in rf:
         data.append(tuple(float(x) for x in row.strip().split(' ')))
@@ -17,15 +21,15 @@ with open('dataset1') as rf:
 N = len(data)
 data = np.array(data)
 
-X = data[:, 0:6]
-y = data[:, 6]
+X = data[:, 0:features_count]
+y = data[:, features_count]
 
 #%%
 
 # Calculating hopkins statistic
 m = 100
 Xs = X[np.random.choice(N, m)]
-Xr = np.random.random((100, 6))
+Xr = np.random.random((100, features_count))
 
 dxs = np.sort(cdist(Xs, X, 'euclidean'), axis=1)[:, 1]
 dxr = np.min(cdist(Xr, X, 'euclidean'), axis=1)
@@ -42,7 +46,7 @@ hopkins
 ixs = []
 jxs = []
 ws = []
-with open('dataset2') as rf:
+with open(mst_dataset) as rf:
     next(rf)
     next(rf)
     for row in rf:
@@ -103,15 +107,15 @@ for lei in tqdm(range(20000)):
         results.append(evaluate_graph_clusters(igraph))
 
 for r in results:
-    print(*r)
+    print(*r, sep='\t')
 
 #%%
 
 igraph = graph.copy()
 
 for i, j, w in largest_edges:
-    if w < 0.2: break
+    if w < 4.5: break
     del igraph[i, j]
 
 r2 = evaluate_graph_clusters(igraph)
-print(*r2)
+print(*r2, sep='\t')

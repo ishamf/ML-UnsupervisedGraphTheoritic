@@ -12,7 +12,7 @@ sns.set(color_codes=True)
 
 # Load the data
 data = []
-with open('dataset1') as rf:
+with open('dataset_m') as rf:
     next(rf)
     for row in rf:
         data.append(tuple(float(x) for x in row.strip().split(' ')))
@@ -20,9 +20,9 @@ with open('dataset1') as rf:
 N = len(data)
 data = np.array(data)
 
-X = data[:, 0:6]
-y = data[:, 6]
-X_tsne = np.load('xr.npy')
+X = data[:, 0:108]
+y = data[:, 108]
+# X_tsne = np.load('xr.npy')
 
 #%%
 
@@ -40,4 +40,4 @@ X_pca = pca.fit_transform(X)
 plt.scatter(X_pca[y == 0][:, 0], X_pca[y == 0][:, 1], c='red')
 plt.scatter(X_pca[y == 1][:, 0], X_pca[y == 1][:, 1], c='blue')
 
-plt.gca().legend(['<=50K', '>50K'])
+plt.gca().legend(['<=50K', '>50K'], loc=3)
